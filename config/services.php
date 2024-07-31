@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'viacep' => [
+        'endpoint' => env('VIACEP_ENDPOINT'),
+        'format' => '/' . env('VIACEP_FORMAT'),
+    ],
+
 ];
