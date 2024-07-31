@@ -1,6 +1,7 @@
 <?php
 
 use function Pest\Laravel\get;
+use function Pest\Laravel\getJson;
 
 it('should can return a cep information', function () {
     $data = App\Actions\ViaCEP\Get::execute('01001000');
@@ -38,4 +39,27 @@ it('should dont see a cep information on search result', function () {
     get(route('home', [
         'search' => '01000100',
     ]))->assertSee('Don\'t found this CEP.');
+});
+
+it('should access api cep route', function () {
+    getJson(route('api.cep', '01001000'))
+        ->assertSuccessful();
+});
+
+it('should the api return a cep information', function () {
+    getJson(route('api.cep', '01001000'))
+        ->assertJson([
+            'cep' => '01001-000',
+            'logradouro' => 'Praça da Sé',
+            'complemento' => 'lado ímpar',
+            'unidade' => '',
+            'bairro' => 'Sé',
+            'localidade' => 'São Paulo',
+            'uf' => 'SP',
+        ]);
+});
+
+it('should the api dont return a cep information', function () {
+    getJson(route('api.cep', '01000100'))
+        ->assertJson([]);
 });
