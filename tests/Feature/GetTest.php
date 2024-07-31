@@ -63,3 +63,19 @@ it('should the api dont return a cep information', function () {
     getJson(route('api.cep', '01000100'))
         ->assertJson([]);
 });
+
+it('should can cache a cep', function () {
+    $cep = '01001000';
+    App\Actions\ViaCEP\Get::execute($cep);
+
+    expect(cache($cep))
+        ->toHaveProperties(['cep', 'logradouro', 'complemento', 'unidade', 'bairro', 'localidade', 'uf']);
+});
+
+it('should cant cache a null information', function () {
+    $cep = '01000100';
+    App\Actions\ViaCEP\Get::execute($cep);
+
+    expect(cache()->has($cep))
+        ->toBeFalse();
+});
