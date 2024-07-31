@@ -28,17 +28,10 @@
                     </header>
 
                     <main class="mt-6">
-                        <form class="flex items-center max-w-sm mx-auto" action="{{ route('home') }}" method="GET">   
-                            <label for="simple-search" class="sr-only">Search</label>
+                        <form class="flex items-center max-w-xs mx-auto" action="{{ route('home') }}" method="GET">   
+                            <label for="search" class="sr-only">Search</label>
                             <div class="relative w-full">
-                                <input type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-xl rounded-lg focus:ring-red-500 focus:border-red-500 block w-full ps-4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500" placeholder="Search a CEP... Ex. 01001000" required maxlength="8" />
-                                <div class="absolute inset-y-0 end-0 flex items-center pe-3">
-                                    <button type="reset">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                            <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </button>
-                                </div>
+                                <input type="text" id="search" name="search" class="bg-gray-50 border border-gray-300 text-gray-900 text-xl rounded-lg focus:ring-red-500 focus:border-red-500 block w-full ps-4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500" placeholder="Search for a CEP..." maxlength="8" value="{{ request()->search }}" />
                             </div>
                             <button type="submit" class="p-2.5 ms-2 text-sm font-medium text-gray-50 dark:text-gray-800 bg-red-700 rounded-lg border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
                                 <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -47,6 +40,42 @@
                                 <span class="sr-only">Search</span>
                             </button>
                         </form>
+                        @isset ($result)
+                            <div class="mx-auto mt-8 max-w-md p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-700 dark:border-gray-700">
+                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $result->cep }}</h5>
+                                <p class="mb-3 font-normal leading-10 text-gray-900 dark:text-gray-200">
+                                    @if ($result->logradouro)
+                                        <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">Logradouro</kbd>
+                                        {{ $result->logradouro }}
+                                    @endif
+                                    @if ($result->complemento)
+                                        <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">Complemento</kbd>
+                                        {{ $result->complemento }}
+                                    @endif
+                                    @if ($result->unidade)
+                                    <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">Unidade</kbd>
+                                    {{ $result->unidade }}
+                                    @endif
+                                    @if ($result->bairro)
+                                        <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">Bairro</kbd>
+                                        {{ $result->bairro }}
+                                    @endif
+                                    @if ($result->localidade)
+                                        <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">Localidade</kbd>
+                                        {{ $result->localidade }}
+                                    @endif
+                                    @if ($result->uf)
+                                        <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">UF</kbd>
+                                        {{ $result->uf }}
+                                    @endif
+                                </p>
+                            </div>
+                        @endisset
+                        @if (request()->search && ! $result)
+                            <div class="mx-auto mt-8 max-w-xs p-6 text-xl font-bold text-red-600 dark:text-red-500 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-700 dark:border-gray-700">
+                                <p>{{ 'Don\'t found this CEP.' }}</p>
+                            </div>
+                        @endif
                     </main>
 
                     <footer class="py-16 text-center text-sm text-black dark:text-white/70">
