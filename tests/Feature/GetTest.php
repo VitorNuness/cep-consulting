@@ -1,5 +1,7 @@
 <?php
 
+use function Pest\Laravel\get;
+
 it('should can return a cep information', function () {
     $data = App\Actions\ViaCEP\Get::execute('01001000');
 
@@ -19,4 +21,9 @@ it('should dont return when given a invalid cep', function () {
 
     expect($data)
         ->toBeNull();
+});
+
+it('should access home page', function () {
+    get(route('home'))
+        ->assertSuccessful();
 });
